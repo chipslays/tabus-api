@@ -1,7 +1,6 @@
 <?php
 
 use Tabus\Client;
-use Tabus\Constants\Format;
 
 require __DIR__ . '/../vendor/autoload.php';
 
