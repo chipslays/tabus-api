@@ -14,6 +14,8 @@ class Client
 
     protected ?Cache $cache = null;
 
+    protected int $paginateSize = 4;
+
     public array $defaultParameters = [
         'limit' => 20,
         'page' => 0,
@@ -100,7 +102,7 @@ class Client
      * @param int $ttl Длительность кэширования в секундах.
      * @return void
      */
-    public function cache(string $path, int $ttl = Cache::DEFAULT_TTL): void
+    public function setCache(string $path, int $ttl = Cache::DEFAULT_TTL): void
     {
         $this->cache = new Cache($this, $path, $ttl);
     }
@@ -114,5 +116,22 @@ class Client
         preg_match('/api\d+/', $this->domain, $matches);
 
         return preg_replace('/api\d+/', $matches[0], $url, 1);
+    }
+
+    /**
+     * @param int $size
+     * @return void
+     */
+    public function setPaginate(int $size): void
+    {
+        $this->paginateSize = $size;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPaginate(): int
+    {
+        return $this->paginateSize;
     }
 }

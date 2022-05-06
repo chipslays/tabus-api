@@ -21,5 +21,16 @@ class JsonResponse extends Response
         if (isset($this->items['items'])) {
             $this->items = $this->items['items'];
         }
+
+        $this->paginate($client->getPaginate());
+    }
+
+    /**
+     * @param int $size
+     * @return void
+     */
+    public function paginate(int $size): void
+    {
+        $this->makePagination($size);
     }
 }

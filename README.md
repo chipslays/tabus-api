@@ -19,7 +19,7 @@ require __DIR__ . '/vendor/autoload.php';
 $client = new Client('xxx', 'https://api1234567890.example.com');
 
 // Опционально: кешируем последущие запросы на 1 час.
-$client->cache(__DIR__ . '/cache', 3600);
+$client->setCache(__DIR__ . '/cache', 3600);
 
 // Получаем жанры.
 $response = $client->api('genre');

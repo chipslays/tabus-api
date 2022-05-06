@@ -24,5 +24,16 @@ class XmlResponse extends Response
         if (isset($this->items['items']['item'])) {
             $this->items = $this->items['items']['item'];
         }
+
+        $this->paginate($client->paginateSize);
+    }
+
+    /**
+     * @param int $size
+     * @return void
+     */
+    public function paginate(int $size): void
+    {
+        $this->makePagination($size);
     }
 }

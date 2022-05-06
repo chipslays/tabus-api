@@ -20,50 +20,6 @@ class Response extends Collection
         if (isset($this->items['results'])) {
             $this->items['results'] = $this->standartize($this->items['results']);
         }
-
-        if (isset($this->items['total']) && ($this->items['next_page'] || $this->items['prev_page'])) {
-            $this->items['pagination']['perPage'] = count($this->items['results']);
-            $this->items['pagination']['itemsCount'] = $this->items['total'];
-            $this->items['pagination']['pagesCount'] = (int) ceil($this->items['pagination']['itemsCount'] / $this->items['pagination']['perPage']);
-
-            if ($this->items['next_page']) {
-                $arrUrl = parse_url($this->items['next_page']);
-                parse_str($arrUrl['query'], $arrQuery);
-                $this->items['pagination']['currentPage'] = $arrQuery['page'] - 1;
-                $basePageUrl = str_replace("page={$arrQuery['page']}", 'page={page}', $this->items['next_page']);
-            } else {
-                $arrUrl = parse_url($this->items['prev_page']);
-                parse_str($arrUrl['query'], $arrQuery);
-                $this->items['pagination']['currentPage'] = $arrQuery['page'] + 1;
-                $basePageUrl = str_replace("page={$arrQuery['page']}", 'page={page}', $this->items['prev_page']);
-            }
-
-            if ($this->items['pagination']['currentPage'] < $this->items['pagination']['pagesCount']) {
-                $this->items['pagination']['nextPage'] = $this->items['pagination']['currentPage'] + 1;
-                $this->items['pagination']['nextPageUrl'] = str_replace('{page}', $this->items['pagination']['nextPage'], $basePageUrl);
-                $this->items['pagination']['hasNextPage'] = true;
-            } else {
-                $this->items['pagination']['nextPage'] = null;
-                $this->items['pagination']['hasNextPage'] = false;
-            }
-
-            if ($this->items['pagination']['currentPage'] > 0) {
-                $this->items['pagination']['prevPage'] = $this->items['pagination']['currentPage'] - 1;
-                $this->items['pagination']['nextPageUrl'] = str_replace('{page}', $this->items['pagination']['prevPage'], $basePageUrl);
-                $this->items['pagination']['hasPrevPage'] = true;
-            } else {
-                $this->items['pagination']['prevPage'] = null;
-                $this->items['pagination']['hasPrevPage'] = false;
-            }
-
-            $pages = range($this->items['pagination']['currentPage'] - 6, $this->items['pagination']['currentPage'] + 6);
-            array_unshift($pages, 0);
-            $pages[] = $this->items['pagination']['pagesCount'];
-            $this->items['pagination']['pages'] = (new Collection($pages))
-                ->filter(fn ($item) => $item >= 0 && $item <= $this->items['pagination']['pagesCount'])
-                ->mapWithKeys(fn ($item) => [$item => str_replace('{page}', $item, $basePageUrl)])
-                ->toArray();
-        }
     }
 
     /**
@@ -84,6 +40,59 @@ class Response extends Collection
         }
 
         return $items;
+    }
+
+    /**
+     * @param int $size
+     * @return void
+     */
+    public function makePagination(int $size): void
+    {
+        if (!isset($this->items['total']) || (!$this->items['next_page'] & !$this->items['prev_page'])) {
+            return;
+        }
+
+        $this->items['pagination']['perPage'] = count($this->items['results']);
+        $this->items['pagination']['itemsCount'] = $this->items['total'];
+        $this->items['pagination']['pagesCount'] = (int) ceil($this->items['pagination']['itemsCount'] / $this->items['pagination']['perPage']);
+
+        if ($this->items['next_page']) {
+            $arrUrl = parse_url($this->items['next_page']);
+            parse_str($arrUrl['query'], $arrQuery);
+            $this->items['pagination']['currentPage'] = $arrQuery['page'] - 1;
+            $basePageUrl = str_replace("page={$arrQuery['page']}", 'page={page}', $this->items['next_page']);
+        } else {
+            $arrUrl = parse_url($this->items['prev_page']);
+            parse_str($arrUrl['query'], $arrQuery);
+            $this->items['pagination']['currentPage'] = $arrQuery['page'] + 1;
+            $basePageUrl = str_replace("page={$arrQuery['page']}", 'page={page}', $this->items['prev_page']);
+        }
+
+        if ($this->items['pagination']['currentPage'] < $this->items['pagination']['pagesCount']) {
+            $this->items['pagination']['nextPage'] = $this->items['pagination']['currentPage'] + 1;
+            $this->items['pagination']['nextPageUrl'] = str_replace('{page}', $this->items['pagination']['nextPage'], $basePageUrl);
+            $this->items['pagination']['hasNextPage'] = true;
+        } else {
+            $this->items['pagination']['nextPage'] = null;
+            $this->items['pagination']['hasNextPage'] = false;
+        }
+
+        if ($this->items['pagination']['currentPage'] > 0) {
+            $this->items['pagination']['prevPage'] = $this->items['pagination']['currentPage'] - 1;
+            $this->items['pagination']['nextPageUrl'] = str_replace('{page}', $this->items['pagination']['prevPage'], $basePageUrl);
+            $this->items['pagination']['hasPrevPage'] = true;
+        } else {
+            $this->items['pagination']['prevPage'] = null;
+            $this->items['pagination']['hasPrevPage'] = false;
+        }
+
+        $pages = range($this->items['pagination']['currentPage'] - $size, $this->items['pagination']['currentPage'] + $size);
+        array_unshift($pages, 0);
+        $pages[] = $this->items['pagination']['pagesCount'];
+        $this->items['pagination']['pages'] = (new Collection($pages))
+            ->filter(fn ($item) => $item >= 0 && $item <= $this->items['pagination']['pagesCount'])
+            ->mapWithKeys(fn ($item) => [$item => str_replace('{page}', $item, $basePageUrl)])
+            ->toArray();
     }
 
     /**
