@@ -11,7 +11,7 @@ $client = new Client('135863afef0756ed866ecc3ed872371d', 'https://api1651726272.
 $client->cache(__DIR__ . '/cache', 3600);
 
 // Получаем информацию о фильме.
-$response = $client->api('franchise/details', ['id' => 1]);
-
+$response = $client->api('franchise/details', ['id' => 56419]);
+dd($response);
 // Выводим информацию о фильме.
 dump($response->name . ' — ' . $response->slogan);
