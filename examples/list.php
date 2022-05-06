@@ -11,7 +11,7 @@ $client = new Client('135863afef0756ed866ecc3ed872371d', 'https://api1651726272.
 $client->cache(__DIR__ . '/cache', 3600);
 
 // Получаем фильмы.
-$response = $client->api('list', ['limit' => 5, 'type' => 'films']);
+$response = $client->api('list', ['limit' => 20, 'type' => 'films']);
 
 // Выводим фильмы
 $response->results->each(function ($item) {
