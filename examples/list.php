@@ -8,7 +8,10 @@ require __DIR__ . '/../vendor/autoload.php';
 $client = new Client('135863afef0756ed866ecc3ed872371d', 'https://api1651726272.bhcesh.me');
 
 // Опционально: кешируем последущие запросы на 1 час.
-$client->cache(__DIR__ . '/cache', 3600);
+$client->setCache(__DIR__ . '/cache', 3600);
+
+// Опционально: кол-во страниц от текущей страницы
+$client->setPaginate(6);
 
 // Получаем фильмы.
 $response = $client->api('list', ['limit' => 20, 'type' => 'films']);
