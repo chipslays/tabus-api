@@ -92,18 +92,18 @@ class Response extends Collection
         $lastPage = end($pages);
 
         if ($firstPage - $size > 0) {
-            array_unshift($pages, '...');
+            $pages[1] = '...';
         }
         array_unshift($pages, 0);
 
         if ($lastPage + $size < $this->items['pagination']['pagesCount']) {
-            $pages[] = '...';
+            $pages[$this->items['pagination']['pagesCount'] - 1] = '...';
         }
         $pages[] = $this->items['pagination']['pagesCount'];
 
         $this->items['pagination']['pages'] = (new Collection($pages))
             ->filter(fn ($item) => $item >= 0 && $item <= $this->items['pagination']['pagesCount'] || $item === '...')
-            ->mapWithKeys(fn ($item) => $item === '...' ? ['_' . rand(1000,9999) => $item] : [$item => str_replace('{page}', $item, $basePageUrl)])
+            ->mapWithKeys(fn ($item, $key) => $item === '...' ? [$key => $item] : [$item => str_replace('{page}', $item, $basePageUrl)])
             ->toArray();
     }
 
