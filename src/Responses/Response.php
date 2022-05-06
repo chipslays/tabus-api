@@ -16,7 +16,8 @@ class Response extends Collection
         // стандартизируем ответ
         $this->items = $this->standartize($this->items);
 
-        if ($this->items['results']) {
+        // TODO: рекурсивная функция, по всем массивам
+        if (isset($this->items['results'])) {
             $this->items['results'] = $this->standartize($this->items['results']);
         }
     }
