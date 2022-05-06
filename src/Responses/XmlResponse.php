@@ -24,13 +24,5 @@ class XmlResponse extends Response
         if (isset($this->items['items']['item'])) {
             $this->items = $this->items['items']['item'];
         }
-
-        if (isset($this->items['prev_page']) && $this->items['prev_page'] === []) {
-            $this->items['prev_page'] = null;
-        }
-
-        if (isset($this->items['next_page']) && $this->items['next_page'] === []) {
-            $this->items['next_page'] = null;
-        }
     }
 }
