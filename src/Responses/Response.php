@@ -54,10 +54,6 @@ class Response extends Collection
             return;
         }
 
-        $this->items['pagination']['perPage'] = count($this->items['results']);
-        $this->items['pagination']['itemsCount'] = $this->items['total'];
-        $this->items['pagination']['pagesCount'] = (int) ceil($this->items['pagination']['itemsCount'] / $this->items['pagination']['perPage']);
-
         if ($this->items['next_page']) {
             $arrUrl = parse_url($this->items['next_page']);
             parse_str($arrUrl['query'], $arrQuery);
@@ -69,6 +65,10 @@ class Response extends Collection
             $this->items['pagination']['currentPage'] = $arrQuery['page'] + 1;
             $basePageUrl = str_replace("page={$arrQuery['page']}", 'page={page}', $this->items['prev_page']);
         }
+
+        $this->items['pagination']['perPage'] = $arrQuery['limit'] ?? 20;
+        $this->items['pagination']['itemsCount'] = $this->items['total'];
+        $this->items['pagination']['pagesCount'] = (int) ceil($this->items['pagination']['itemsCount'] / $this->items['pagination']['perPage']);
 
         if ($this->items['pagination']['currentPage'] < $this->items['pagination']['pagesCount']) {
             $this->items['pagination']['nextPage'] = $this->items['pagination']['currentPage'] + 1;
