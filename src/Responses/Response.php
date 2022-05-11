@@ -34,7 +34,11 @@ class Response extends Collection
      */
     public function standartize(array $items): array
     {
-        foreach ($items as &$item) {
+        foreach ($items as $key => &$item) {
+            if (in_array($key, ['results'])) {
+                continue;
+            }
+
             $values = [
                 '-','–','—', [], '',
             ];
