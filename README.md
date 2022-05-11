@@ -1,3 +1,6 @@
+![](https://img.shields.io/github/license/chipslays/tabus-api)
+![](https://img.shields.io/packagist/dt/chipslays/tabus-api)
+
 # 🎬 Tabus API
 
 Низкоуровневая библиотека для работы с API Tabus, с поддержкой простого кэширования запросов из коробки.
