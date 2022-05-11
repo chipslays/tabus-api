@@ -13,10 +13,14 @@ class Response extends Collection
     {
         parent::__construct($items);
 
+        if (isset($this->items['total']) && $this->items['total'] == 0) {
+            $this->items['results'] = [];
+        }
+
         // стандартизируем ответ
         $this->items = $this->standartize($this->items);
 
-        // TODO: рекурсивная функция, по всем массивам
+        // TODO: рекурсивная функция, по всем массивам (кроме results)
         if (isset($this->items['results'])) {
             $this->items['results'] = $this->standartize($this->items['results']);
         }
@@ -48,7 +52,7 @@ class Response extends Collection
      * @param int $size
      * @return void
      */
-    public function makePagination(int $size): void
+    public function paginate(int $size): void
     {
         if (!isset($this->items['total']) || (!$this->items['next_page'] & !$this->items['prev_page'])) {
             return;

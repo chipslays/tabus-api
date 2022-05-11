@@ -24,13 +24,4 @@ class JsonResponse extends Response
 
         $this->paginate($client->getPaginate());
     }
-
-    /**
-     * @param int $size
-     * @return void
-     */
-    public function paginate(int $size): void
-    {
-        $this->makePagination($size);
-    }
 }
