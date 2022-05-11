@@ -43,6 +43,8 @@ class Response extends Collection
     }
 
     /**
+     * TODO: переделать эту порнографию.
+     *
      * @param int $size
      * @return void
      */
@@ -77,7 +79,7 @@ class Response extends Collection
             $this->items['pagination']['hasNextPage'] = false;
         }
 
-        if ($this->items['pagination']['currentPage'] > 0) {
+        if ($this->items['pagination']['currentPage'] > 1) {
             $this->items['pagination']['prevPage'] = $this->items['pagination']['currentPage'] - 1;
             $this->items['pagination']['nextPageUrl'] = str_replace('{page}', $this->items['pagination']['prevPage'], $basePageUrl);
             $this->items['pagination']['hasPrevPage'] = true;
@@ -94,7 +96,7 @@ class Response extends Collection
         if ($firstPage - $size > 0) {
             $pages[1] = '...';
         }
-        array_unshift($pages, 0);
+        array_unshift($pages, 1);
 
         if ($lastPage + $size < $this->items['pagination']['pagesCount']) {
             $pages[$this->items['pagination']['pagesCount'] - 1] = '...';
@@ -102,7 +104,7 @@ class Response extends Collection
         $pages[] = $this->items['pagination']['pagesCount'];
 
         $this->items['pagination']['pages'] = (new Collection($pages))
-            ->filter(fn ($item) => $item >= 0 && $item <= $this->items['pagination']['pagesCount'] || $item === '...')
+            ->filter(fn ($item) => $item >= 1 && $item <= $this->items['pagination']['pagesCount'] || $item === '...')
             ->mapWithKeys(fn ($item, $key) => $item === '...' ? [$key => $item] : [$item => str_replace('{page}', $item, $basePageUrl)])
             ->toArray();
     }
