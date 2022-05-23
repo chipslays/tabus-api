@@ -19,7 +19,7 @@ class JsonResponse extends Response
         }
 
         if (isset($this->items['items'])) {
-            $this->items = $this->items['items'];
+            $this->items['results'] = new Collection($this->items['items']);
         }
 
         $this->paginate($client->getPaginate());
