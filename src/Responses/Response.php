@@ -103,6 +103,7 @@ class Response extends Collection
 
         if ($firstPage - $size > 0) {
             array_unshift($pages, '...');
+            array_unshift($pages, 1);
         }
         array_unshift($pages, 1);
 
