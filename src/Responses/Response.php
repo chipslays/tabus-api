@@ -114,6 +114,10 @@ class Response extends Collection
         $this->items['pagination']['pages'] = (new Collection($pages))
             ->filter(fn ($item) => $item >= 1 && $item <= $this->items['pagination']['pagesCount'] || $item === '...')
             ->mapWithKeys(fn ($item, $key) => $item === '...' ? [$key => $item] : [$item => str_replace('{page}', $item, $basePageUrl)])
+            ->callback(function ($items) {
+                ksort($items);
+                return $items;
+            })
             ->toArray();
     }
 
