@@ -102,7 +102,7 @@ class Response extends Collection
         $lastPage = end($pages);
 
         if ($firstPage - $size > 0) {
-            $pages[1] = '...';
+            array_unshift($pages, '...');
         }
         array_unshift($pages, 1);
 
