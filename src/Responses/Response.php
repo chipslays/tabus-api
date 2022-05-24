@@ -112,7 +112,7 @@ class Response extends Collection
         }
         $pages[] = $this->items['pagination']['pagesCount'];
 
-        $this->items['pagination']['pages'] = (new Collection($pages))
+        $this->items['pagination']['pageLinks'] = (new Collection($pages))
             ->filter(fn ($item) => $item >= 1 && $item <= $this->items['pagination']['pagesCount'] || $item === '...')
             ->mapWithKeys(fn ($item, $key) => $item === '...' ? [$key => $item] : [$item => str_replace('{page}', $item, $basePageUrl)])
             ->callback(function ($items) {
@@ -120,6 +120,12 @@ class Response extends Collection
                 return $items;
             })
             ->toArray();
+
+        $this->items['pagination']['pageNumbers'] = [];
+
+        foreach ($this->items['pagination']['pageLinks'] as $key => $value) {
+            $this->items['pagination']['pageNumbers'][] = $value !== '...' ? $key : '...';
+        }
     }
 
     /**
