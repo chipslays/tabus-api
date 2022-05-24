@@ -90,6 +90,8 @@ class Client
                 break;
         }
 
+        $response->set('request_url', $url);
+
         $this->cache?->put($cacheKey, $response);
 
         return $response;

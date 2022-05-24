@@ -22,7 +22,7 @@ class XmlResponse extends Response
         }
 
         if (isset($this->items['items']['item'])) {
-            $this->items = $this->items['items']['item'];
+            $this->items['results'] = new Collection($this->items['items']['item']);
         }
 
         $this->paginate($client->getPaginate());

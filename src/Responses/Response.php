@@ -4,6 +4,10 @@ namespace Tabus\Responses;
 
 use Tabus\Support\Collection;
 
+/**
+ * @property Collection $results
+ * @property string $request_id
+ */
 class Response extends Collection
 {
     /**
@@ -42,6 +46,7 @@ class Response extends Collection
             $values = [
                 '-','–','—', [], '',
             ];
+
             if (in_array($item, $values)) {
                 $item = null;
             }
