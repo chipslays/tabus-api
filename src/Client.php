@@ -10,7 +10,7 @@ use CurlHandle;
 
 class Client
 {
-    protected CurlHandle $ch;
+    public CurlHandle $ch;
 
     protected ?Cache $cache = null;
 
@@ -35,6 +35,7 @@ class Client
     ) {
         $this->domain = rtrim($domain, '\\/');
         $this->ch = curl_init();
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, 120);
     }
 
     /**
