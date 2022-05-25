@@ -110,6 +110,16 @@ class Client
     }
 
     /**
+     * Отключить кэширование.
+     *
+     * @return void
+     */
+    public function disableCache(): void
+    {
+        $this->cache = null;
+    }
+
+    /**
      * @param string $url
      * @return string
      */
