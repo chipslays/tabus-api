@@ -10,7 +10,7 @@ use CurlHandle;
 
 class Client
 {
-    protected CurlHandle $ch;
+    public CurlHandle $ch;
 
     protected ?Cache $cache = null;
 
@@ -35,6 +35,7 @@ class Client
     ) {
         $this->domain = rtrim($domain, '\\/');
         $this->ch = curl_init();
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, 120);
     }
 
     /**
@@ -109,6 +110,16 @@ class Client
     public function setCache(string $path, int $ttl = Cache::DEFAULT_TTL): void
     {
         $this->cache = new Cache($this, $path, $ttl);
+    }
+
+    /**
+     * Отключить кэширование.
+     *
+     * @return void
+     */
+    public function disableCache(): void
+    {
+        $this->cache = null;
     }
 
     /**
