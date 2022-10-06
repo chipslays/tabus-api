@@ -92,7 +92,9 @@ class Client
 
         $response->set('request_url', $url);
 
-        $this->cache?->put($cacheKey, $response);
+        if ($response->count() > 1) {
+            $this->cache?->put($cacheKey, $response);
+        }
 
         return $response;
     }
